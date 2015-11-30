@@ -19,25 +19,28 @@
             android:id="@+id/question_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:padding="24dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
+            android:layout_gravity="center_vertical|center_horizontal"
             android:paddingBottom="12dp">
 
             <Button
                 android:id="@+id/yes_button"
                 android:text="@string/yes_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"/>
             <Button
                 android:id="@+id/no_button"
                 android:text="@string/no_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"/>
 
         </LinearLayout>
 
@@ -51,6 +54,7 @@
                 android:text="@string/prev_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
                 android:drawableLeft="@drawable/arrow_left"
                 android:drawablePadding="4dp"/>
             <Button
@@ -58,6 +62,7 @@
                 android:text="@string/next_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
                 android:drawableRight="@drawable/arrow_right"
                 android:drawablePadding="4dp"/>
 

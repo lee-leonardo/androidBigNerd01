@@ -2,6 +2,8 @@ package android.bignerdranch.com.geoquiz;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends Activity {
+    private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
 
     private TextView questionView;
     private Button yesButton;
@@ -30,8 +34,9 @@ public class QuizActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        Log.d(TAG, "on Create(Bundle) called");
 
-        //Getting a reference to an object with a resourceId.
+        //Getting references to an object with a resourceId.
         questionView = (TextView) findViewById(R.id.question_text);
         yesButton    = (Button)   findViewById(R.id.yes_button);
         noButton     = (Button)   findViewById(R.id.no_button);
@@ -39,6 +44,10 @@ public class QuizActivity extends Activity {
         prevButton   = (Button)   findViewById(R.id.prev_button);
 
         //Setup View
+        if (savedInstanceState != null) {
+            //This retrieves pertinent state information via KVO.
+            currentQuestionIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
         updateQuestion();
 
         //Event Listeners
@@ -54,7 +63,6 @@ public class QuizActivity extends Activity {
                 checkAnswer(false);
             }
         });
-
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +70,6 @@ public class QuizActivity extends Activity {
                 updateQuestion();
             }
         });
-
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +77,37 @@ public class QuizActivity extends Activity {
                 updateQuestion();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState");
+        outState.putInt(KEY_INDEX, currentQuestionIndex);
     }
 
     @Override
