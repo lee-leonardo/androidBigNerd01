@@ -1,5 +1,6 @@
 package android.bignerdranch.com.geoquiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.PersistableBundle;
@@ -14,12 +15,14 @@ import android.widget.Toast;
 public class QuizActivity extends Activity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private TextView questionView;
     private Button yesButton;
     private Button noButton;
     private Button nextButton;
     private Button prevButton;
+    private Button cheatButton;
 
     private int currentQuestionIndex = 0;
     private Question[] questionsForView = new Question[] {
@@ -42,6 +45,7 @@ public class QuizActivity extends Activity {
         noButton     = (Button)   findViewById(R.id.no_button);
         nextButton   = (Button)   findViewById(R.id.next_button);
         prevButton   = (Button)   findViewById(R.id.prev_button);
+        cheatButton  = (Button)   findViewById(R.id.cheat_button);
 
         //Setup View
         if (savedInstanceState != null) {
@@ -75,6 +79,19 @@ public class QuizActivity extends Activity {
             public void onClick(View v) {
                 currentQuestionIndex = (questionsForView.length + currentQuestionIndex - 1) % questionsForView.length;
                 updateQuestion();
+            }
+        });
+        cheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Navigating to Cheat Activity - Using an Intent
+                //Intent i = new Intent(QuizActivity.this, CheatActivity.class); // This is a basic Intent
+                //startActivity(i);                                              // This is a basic way to start a new activity using intents
+
+                //Passing an extra into an intent, and setting up request code state.
+                boolean answerIsTrue = questionsForView[currentQuestionIndex].isAnswerTrue();
+                Intent i = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivityForResult(i, REQUEST_CODE_CHEAT);
             }
         });
     }
