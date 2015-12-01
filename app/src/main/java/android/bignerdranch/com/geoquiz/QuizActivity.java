@@ -32,6 +32,7 @@ public class QuizActivity extends Activity {
         new Question(R.string.question_4, false),
         new Question(R.string.question_5, true),
     };
+    private boolean isCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class QuizActivity extends Activity {
             @Override
             public void onClick(View v) {
                 currentQuestionIndex = (currentQuestionIndex + 1) % questionsForView.length;
+                isCheater = false;
                 updateQuestion();
             }
         });
@@ -78,6 +80,7 @@ public class QuizActivity extends Activity {
             @Override
             public void onClick(View v) {
                 currentQuestionIndex = (questionsForView.length + currentQuestionIndex - 1) % questionsForView.length;
+                isCheater = false;
                 updateQuestion();
             }
         });
@@ -158,12 +161,33 @@ public class QuizActivity extends Activity {
         boolean answerIsTrue = questionsForView[currentQuestionIndex].isAnswerTrue();
         int toastId;
 
-        if (answerIsTrue && userPressedTrue) {
-            toastId = R.string.correct_toast;
-        } else {
-            toastId = R.string.incorrect_toast;
+        if (isCheater) {
+            toastId = R.string.judgment_toast;
+        }
+        else {
+            if (answerIsTrue && userPressedTrue) {
+                toastId = R.string.correct_toast;
+            }
+            else {
+                toastId = R.string.incorrect_toast;
+            }
         }
 
         Toast.makeText(this, toastId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // When the Activity is checking the response, first checks RESULT_OK
+        if (resultCode != RESULT_OK) {
+            // Returns if no Intent
+            if (data == null) {
+                return;
+            }
+            // Uses the static method to check if the answer was shown.
+            isCheater = CheatActivity.wasAnswerShown(data);
+        }
     }
 }
